@@ -84,7 +84,7 @@ const CommentBlock = ({
           <div className='flex'>
             <Image
               className='h-10 w-10 rounded-[14px]'
-              src={userData ? userData.photo : '/path/to/placeholder-image.png'}
+              src={userData && userData.photo ? userData.photo : '/path/to/placeholder-image.png'}
               alt='User'
               width={40}
               height={40}

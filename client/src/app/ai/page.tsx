@@ -11,7 +11,7 @@ import { AsidePanelRight } from '@/components/surrounding/asideRight';
 import MusicPlayer from '@/components/surrounding/player';
 import { UserData } from '@/components/not_components';
 import fetchClient from '@/other/fetchClient';
-//import SongsList from '@/components/ai/SongsList';
+import SongsList from '@/components/ai/SongsList';
 
 // Типи для даних відповідей від API
 type ResponseData = {
@@ -33,6 +33,18 @@ type SongData = {
   created_at: string;
 };
 
+// Оновіть тип для genAudioData
+type GenAudioData = {
+  customMode: boolean;
+  instrumental: boolean;
+  callBackUrl: string;
+  model: string;
+  example: string;
+  prompt: string;
+  style: string;
+  title: string;
+};
+
 // Головний компонент сторінки
 const SunoAIPage = () => {
   const router = useRouter();
@@ -50,8 +62,8 @@ const SunoAIPage = () => {
   const [selectedSong, setSelectedSong] = useState<SongData | null>(null);
   const [showSongsList, setShowSongsList] = useState(false);
 
-  // Стан для форми генерації аудіо
-  const [genAudioData, setGenAudioData] = useState({
+  // Змініть стан genAudioData
+  const [genAudioData, setGenAudioData] = useState<GenAudioData>({
     customMode: true,
     instrumental: false,
     callBackUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/ai/callback/`,
@@ -181,28 +193,50 @@ const SunoAIPage = () => {
         model: song.model_name.includes('V4') ? 'V4' : 'V3_5'
       }));
     } else if (activeTab === 'wav') {
+      // Для WAV конвертації потрібні обидва ID
+      console.log('Setting WAV data from song:', song); // Debug log
+      
+      // Перевіряємо чи містить об'єкт пісні обов'язкові поля
+      if (!song.id || !song.task_id) {
+        showError(
+          'Помилка: Пісня не містить необхідних даних для конвертації у WAV', 
+          'error'
+        );
+        return;
+      }
+      
       setWavData(prev => ({
         ...prev,
         audioId: song.id,
         taskId: song.task_id
       }));
+      
+      console.log('Updated WAV form data:', {
+        audioId: song.id,
+        taskId: song.task_id
+      });
     }
-  }, [activeTab]);
+  }, [activeTab, showError]);
 
   // Функція для відправки запиту на генерацію
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let url = '';
-    let payload = {};
+    let payload: {
+      taskId?: string;
+      audioId?: string;
+      callBackUrl: string;
+      example?: string;
+      customMode?: boolean;
+      instrumental?: boolean;
+      model?: string;
+    } = { callBackUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/ai/callback/` };
 
     if (activeTab === 'generate_audio') {
       url = '/api/ai/generate/audio/';
       payload = {
         ...genAudioData,
-        customMode: genAudioData.customMode,
-        instrumental: genAudioData.instrumental,
         callBackUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/ai/callback/`,
-        model: genAudioData.model
       };
       
       // Додаємо обов'язкові поля в залежності від режиму
@@ -263,14 +297,36 @@ const SunoAIPage = () => {
       }
       
       url = '/api/ai/generate/wav/';
+      
+      // Ensure both taskId and audioId are set properly from the selected song
+      const taskId = wavData.taskId || selectedSong.task_id;
+      const audioId = wavData.audioId || selectedSong.id;
+      
+      // Validate that all required fields exist
+      if (!taskId || !audioId) {
+        showError('Помилка: ID завдання або ID аудіо відсутні', 'error');
+        return;
+      }
+      
+      // Create the payload with explicit values (not using wavData directly)
       payload = {
-        ...wavData,
-        callBackUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/ai/callback/`
+        taskId: taskId,
+        audioId: audioId,
+        callBackUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/ai/callback/`,
       };
+      
+      // If example is provided, add it to the payload
+      if (wavData.example) {
+        payload.example = wavData.example;
+      }
+      
+      console.log('WAV payload:', payload); // Debug log
     }
 
     try {
       setResponse({ message: "Відправляємо запит..." });
+      
+      console.log(`Sending request to ${process.env.NEXT_PUBLIC_API_URL}${url} with payload:`, payload);
       
       const response = await fetchClient(
         `${process.env.NEXT_PUBLIC_API_URL}${url}`,
@@ -284,6 +340,7 @@ const SunoAIPage = () => {
       );
 
       const data = await response.json();
+      console.log('API response:', data); // Debug log
 
       if (response.ok) {
         showError('Запит успішно відправлено! Перевірте статус завдання пізніше.', 'success');
@@ -378,8 +435,8 @@ const SunoAIPage = () => {
               <AsidePanelLeft />
             </aside>
 
-            <main className='overflow-y flex-1 px-4 pb-4'>
-              <div className='fixed min-h-[80vh] w-[1280px] rounded-[30px] bg-gradient-to-r from-[#2D2D45] to-[#3F4B8A] p-8 shadow-2xl backdrop-blur-lg'>
+            <main className='flex-1 overflow-y-auto px-4 pb-4'>
+              <div className='relative min-h-[80vh] w-full max-w-[1280px] mx-auto rounded-[30px] bg-gradient-to-r from-[#2D2D45] to-[#3F4B8A] p-8 shadow-2xl backdrop-blur-lg'>
                 <div className='flex flex-row gap-8'>
                   {/* Панель з вкладками */}
                   <motion.div className='w-64'>
@@ -453,13 +510,13 @@ const SunoAIPage = () => {
                   {/* Панель форми */}
                   <motion.div className='flex-1'>
                     {/* Список пісень (відображається при потребі) */}
-                    {/* {showSongsList && (
+                    {showSongsList && (
                       <SongsList
                         songs={songs}
                         onSelect={handleSelectSong}
                         onClose={() => setShowSongsList(false)}
                       />
-                    )} */}
+                    )}
                     
                     {/* Основна форма */}
                     {!showSongsList && (

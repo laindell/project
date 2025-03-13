@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Music, User, Globe } from 'lucide-react';
@@ -36,7 +34,7 @@ interface SongsListProps {
   onSelect: (song: Song) => void;
   onClose: () => void;
   initialTab?: 'user' | 'public';
-  songs?: Song[]; // Додаємо необов'язковий проп для передачі списку пісень
+  songs?: Song[]; // Необов'язковий проп для передачі списку пісень
 }
 
 const SongsList: React.FC<SongsListProps> = ({ 
@@ -45,7 +43,8 @@ const SongsList: React.FC<SongsListProps> = ({
   initialTab = 'user',
   songs: propSongs
 }) => {
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [userSongs, setUserSongs] = useState<Song[]>([]);
+  const [publicSongs, setPublicSongs] = useState<Song[]>([]);
   const [filteredSongs, setFilteredSongs] = useState<Song[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -58,11 +57,11 @@ const SongsList: React.FC<SongsListProps> = ({
   const fetchUserSongs = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-    // Очищаємо попередній список при зміні на пісні користувача
-    setSongs([]);
+    // Очищаємо відфільтрований список
     setFilteredSongs([]);
     
     try {
+      console.log('Завантаження пісень користувача...');
       const response = await fetchClient(
         `${process.env.NEXT_PUBLIC_API_URL}/api/ai/songs/`
       );
@@ -72,16 +71,20 @@ const SongsList: React.FC<SongsListProps> = ({
       }
       
       const data = await response.json();
+      console.log('Отримано пісні користувача:', data);
+      
       if (data.success && Array.isArray(data.songs)) {
-        setSongs(data.songs);
+        setUserSongs(data.songs);
         setFilteredSongs(data.songs);
+        console.log(`Завантажено ${data.songs.length} пісень користувача`);
       } else {
-        setSongs([]);
+        setUserSongs([]);
         setFilteredSongs([]);
       }
     } catch (err) {
+      console.error('Помилка при завантаженні пісень користувача:', err);
       setError(err instanceof Error ? err.message : 'Помилка завантаження пісень');
-      setSongs([]);
+      setUserSongs([]);
       setFilteredSongs([]);
     } finally {
       setIsLoading(false);
@@ -92,11 +95,11 @@ const SongsList: React.FC<SongsListProps> = ({
   const fetchPublicSongs = useCallback(async (page: number = 1) => {
     setIsLoading(true);
     setError(null);
-    // Очищаємо попередній список при зміні на публічні пісні
-    setSongs([]);
+    // Очищаємо відфільтрований список
     setFilteredSongs([]);
     
     try {
+      console.log('Завантаження публічних пісень...');
       const response = await fetchClient(
         `${process.env.NEXT_PUBLIC_API_URL}/api/ai/public/songs/?page=${page}&page_size=10`
       );
@@ -106,9 +109,15 @@ const SongsList: React.FC<SongsListProps> = ({
       }
       
       const data = await response.json();
+      console.log('Отримано публічні пісні:', data);
+      
       if (data.success && Array.isArray(data.songs)) {
-        setSongs(data.songs);
-        setFilteredSongs(data.songs);
+        // Фільтруємо тільки публічні пісні
+        const onlyPublicSongs = data.songs.filter((song: Song) => song.is_public === true);
+        console.log(`Відфільтровано ${onlyPublicSongs.length} публічних пісень з ${data.songs.length} отриманих`);
+        
+        setPublicSongs(onlyPublicSongs);
+        setFilteredSongs(onlyPublicSongs);
         
         // Встановлюємо пагінацію
         if (data.pagination) {
@@ -116,13 +125,14 @@ const SongsList: React.FC<SongsListProps> = ({
           setTotalPages(data.pagination.total_pages);
         }
       } else {
-        setSongs([]);
+        setPublicSongs([]);
         setFilteredSongs([]);
         setTotalPages(1);
       }
     } catch (err) {
+      console.error('Помилка при завантаженні публічних пісень:', err);
       setError(err instanceof Error ? err.message : 'Помилка завантаження публічних пісень');
-      setSongs([]);
+      setPublicSongs([]);
       setFilteredSongs([]);
     } finally {
       setIsLoading(false);
@@ -131,43 +141,63 @@ const SongsList: React.FC<SongsListProps> = ({
 
   // Ефект для завантаження пісень при першому рендері або зміні вкладки
   useEffect(() => {
-    // Якщо передано список пісень напряму і ми на вкладці користувача,
-    // використовуємо їх замість завантаження
-    if (propSongs && activeTab === 'user') {
-      setSongs(propSongs);
-      setFilteredSongs(propSongs);
-      setIsLoading(false);
-      return;
-    }
+    console.log(`useEffect: activeTab=${activeTab}, propSongs=${propSongs ? 'існують' : 'відсутні'}`);
     
-    // В іншому випадку, завантажуємо відповідні пісні
     if (activeTab === 'user') {
-      if (!propSongs) {
+      // Якщо передано список пісень напряму і ми на вкладці користувача,
+      // використовуємо їх замість завантаження
+      if (propSongs) {
+        console.log('Використовуємо передані пісні для вкладки "Мої пісні"');
+        setUserSongs(propSongs);
+        setFilteredSongs(propSongs);
+        setIsLoading(false);
+      } else if (userSongs.length === 0) {
+        // Завантажуємо пісні користувача, якщо їх ще немає
+        console.log('Завантажуємо пісні користувача через API');
         fetchUserSongs();
+      } else {
+        // Використовуємо вже завантажені пісні користувача
+        console.log('Використовуємо вже завантажені пісні користувача');
+        setFilteredSongs(userSongs);
+        setIsLoading(false);
       }
     } else {
-      // Для публічних пісень завжди робимо окремий запит 
-      fetchPublicSongs(1);
+      // Публічні пісні
+      if (publicSongs.length === 0) {
+        // Завантажуємо публічні пісні, якщо їх ще немає
+        console.log('Завантажуємо публічні пісні через API');
+        fetchPublicSongs(1);
+      } else {
+        // Використовуємо вже завантажені публічні пісні
+        console.log('Використовуємо вже завантажені публічні пісні');
+        setFilteredSongs(publicSongs);
+        setIsLoading(false);
+      }
     }
-  }, [activeTab, fetchUserSongs, fetchPublicSongs, propSongs]);
+  }, [activeTab, propSongs, userSongs, publicSongs, fetchUserSongs, fetchPublicSongs]);
 
   // Ефект для фільтрації пісень при зміні рядка пошуку
   useEffect(() => {
+    // Визначаємо джерело даних в залежності від активної вкладки
+    const sourceData = activeTab === 'user' ? userSongs : publicSongs;
+    console.log(`Фільтрація ${sourceData.length} пісень для вкладки "${activeTab}"`);
+    
     if (searchQuery.trim() === '') {
-      setFilteredSongs(songs);
+      setFilteredSongs(sourceData);
       return;
     }
     
     const query = searchQuery.toLowerCase();
-    const filtered = songs.filter(song => 
+    const filtered = sourceData.filter(song => 
       song.title.toLowerCase().includes(query) || 
       song.model_name.toLowerCase().includes(query) ||
       (song.styles && Array.isArray(song.styles) && 
         song.styles.some(style => style && style.name && style.name.toLowerCase().includes(query)))
     );
     
+    console.log(`Відфільтровано ${filtered.length} пісень з ${sourceData.length}`);
     setFilteredSongs(filtered);
-  }, [searchQuery, songs]);
+  }, [searchQuery, activeTab, userSongs, publicSongs]);
 
   // Обробник зміни сторінки для публічних пісень
   const handlePageChange = (newPage: number) => {
@@ -200,9 +230,21 @@ const SongsList: React.FC<SongsListProps> = ({
             className={`px-4 py-2 ${activeTab === 'user' ? 'border-b-2 border-[#6374B6]' : ''}`}
             onClick={() => {
               if (activeTab !== 'user') {
+                console.log('Перемикання на вкладку "Мої пісні"');
                 setActiveTab('user');
                 setIsLoading(true);
                 setSearchQuery('');
+                // Встановлюємо фільтрований список з userSongs
+                setFilteredSongs(userSongs.length > 0 ? userSongs : []);
+                if (userSongs.length === 0 && !propSongs) {
+                  fetchUserSongs();
+                } else if (propSongs) {
+                  setUserSongs(propSongs);
+                  setFilteredSongs(propSongs);
+                  setIsLoading(false);
+                } else {
+                  setIsLoading(false);
+                }
               }
             }}
           >
@@ -215,9 +257,17 @@ const SongsList: React.FC<SongsListProps> = ({
             className={`px-4 py-2 ${activeTab === 'public' ? 'border-b-2 border-[#6374B6]' : ''}`}
             onClick={() => {
               if (activeTab !== 'public') {
+                console.log('Перемикання на вкладку "Публічні пісні"');
                 setActiveTab('public');
                 setIsLoading(true);
                 setSearchQuery('');
+                // Встановлюємо фільтрований список з publicSongs
+                setFilteredSongs(publicSongs.length > 0 ? publicSongs : []);
+                if (publicSongs.length === 0) {
+                  fetchPublicSongs(1);
+                } else {
+                  setIsLoading(false);
+                }
               }
             }}
           >
@@ -336,4 +386,4 @@ const SongsList: React.FC<SongsListProps> = ({
   );
 };
 
-export default SongsList;
+export default SongsList; 
