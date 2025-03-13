@@ -1,0 +1,58 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Node.js dependencies
+/node_modules/
+/.pnp
+.pnp.*
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+/next-env.d.ts
+
+# Production build
+/build
+
+# Django & Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.sqlite3
+/db.sqlite3
+/media/
+staticfiles/
+*.log
+venv/
+.env
+.env.*
+
+# PostgreSQL
+*.pgdata
+*.psql
+dump.sql
+
+# Vercel
+.vercel/
+
+# Debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Miscellaneous
+.DS_Store
+*.pem
+*.swp
+*.swo
