@@ -28,6 +28,7 @@ export interface Song {
   created_at: string;
   is_public?: boolean;
   lyrics?: SongLyrics;
+  audio_id: string;
 }
 
 interface SongsListProps {

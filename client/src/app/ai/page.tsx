@@ -24,6 +24,8 @@ type ResponseData = {
 
 // Тип для об'єкта аудіо
 type SongData = {
+  audio_id: string;
+
   id: string;
   task_id: string;
   title: string;
@@ -189,7 +191,7 @@ const SunoAIPage = () => {
     if (activeTab === 'extend_audio') {
       setExtendAudioData(prev => ({
         ...prev,
-        audioId: song.id,
+        audioId: song.audio_id, // Використовуємо audio_id замість id
         model: song.model_name.includes('V4') ? 'V4' : 'V3_5'
       }));
     } else if (activeTab === 'wav') {
@@ -197,7 +199,7 @@ const SunoAIPage = () => {
       console.log('Setting WAV data from song:', song); // Debug log
       
       // Перевіряємо чи містить об'єкт пісні обов'язкові поля
-      if (!song.id || !song.task_id) {
+      if (!song.audio_id || !song.task_id) {
         showError(
           'Помилка: Пісня не містить необхідних даних для конвертації у WAV', 
           'error'
@@ -207,12 +209,12 @@ const SunoAIPage = () => {
       
       setWavData(prev => ({
         ...prev,
-        audioId: song.id,
+        audioId: song.audio_id, // Використовуємо audio_id замість id
         taskId: song.task_id
       }));
       
       console.log('Updated WAV form data:', {
-        audioId: song.id,
+        audioId: song.audio_id,
         taskId: song.task_id
       });
     }
@@ -300,7 +302,7 @@ const SunoAIPage = () => {
       
       // Ensure both taskId and audioId are set properly from the selected song
       const taskId = wavData.taskId || selectedSong.task_id;
-      const audioId = wavData.audioId || selectedSong.id;
+      const audioId = wavData.audioId || selectedSong.audio_id; // Use audio_id here!
       
       // Validate that all required fields exist
       if (!taskId || !audioId) {
@@ -513,9 +515,10 @@ const SunoAIPage = () => {
                     {showSongsList && (
                       <SongsList
                         songs={songs}
-                        onSelect={handleSelectSong}
+                        onSelect={(song) => handleSelectSong(song as unknown as SongData)}
                         onClose={() => setShowSongsList(false)}
                       />
+                    
                     )}
                     
                     {/* Основна форма */}

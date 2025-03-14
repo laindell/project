@@ -44,6 +44,7 @@ class Song(models.Model):
         blank=True
     )
     task_id = models.CharField(max_length=255)
+    audio_id = models.CharField(max_length=255, blank=True, null=True)  # Додане поле для зберігання audio_id
     model_name = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     audio_file = models.CharField(max_length=255)

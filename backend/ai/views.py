@@ -247,6 +247,7 @@ def extend_audio(request):
             {"error": f"Виникла помилка: {str(e)}"}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -565,6 +566,7 @@ def process_track(track, task_record, task_id):
         song = Song.objects.create(
             user=task_record.user if task_record else None,
             task_id=task_id,
+            audio_id=audio_id,  
             model_name=model_name,
             title=title,
             audio_file=audio_file_path,
@@ -578,7 +580,7 @@ def process_track(track, task_record, task_id):
             style_obj, created = MusicStyle.objects.get_or_create(name=style_name)
             song.styles.add(style_obj)
         
-        logger.info(f"Створено запис пісні ID: {song.id}")
+        logger.info(f"Створено запис пісні ID: {song.id}, Audio ID: {audio_id}")
         
         # повертаємо дані пісні
         return {
@@ -590,13 +592,12 @@ def process_track(track, task_record, task_id):
             "model_name": model_name,
             "tags": style_names,
             "prompt": prompt,
-            "durat ion": duration
+            "duration": duration
         }
     except Exception as e:
         logger.exception(f"Помилка при створенні запису пісні: {e}")
     
     return None
-
 # обробники колбеків для різних типів
 
 def process_lyrics_callback(callback_data, task_record):
@@ -700,8 +701,91 @@ def process_wav_callback(callback_data, task_record):
 
 def process_audio_text_callback(callback_data, task_record):
     """Обробляє колбек типу "text" для генерації аудіо."""
-    update_task_status(task_record, "text_generated")
-    return Response({"success": True, "message": "Текст згенеровано"}, status=status.HTTP_200_OK)
+    # Зберігаємо оригінальні результати у завданні
+    update_task_status(task_record, "text_generated", callback_data)
+    
+    # Екстрактимо ID аудіо з даних колбеку
+    audio_ids = []
+    tracks_data = []
+    if "data" in callback_data and isinstance(callback_data.get("data"), list):
+        tracks_data = callback_data.get("data", [])
+        
+        for track in tracks_data:
+            if "id" in track:
+                audio_ids.append(track["id"])
+    
+    # Якщо є задача, зберігаємо аудіо ID для подальшого використання
+    if task_record and audio_ids:
+        # Переконаємось, що result - це словник
+        if not task_record.result or not isinstance(task_record.result, dict):
+            task_record.result = {}
+        
+        # Зберігаємо audio_ids окремо для зручного доступу
+        task_record.result["audio_ids"] = audio_ids
+        task_record.save()
+        
+        logger.info(f"Збережено {len(audio_ids)} audio_ids в задачі {task_record.id}: {audio_ids}")
+    
+    # Створюємо мінімальні записи пісень з доступною інформацією
+    songs_list = []
+    for track in tracks_data:
+        track_id = track.get("id")
+        if not track_id:
+            continue
+            
+        # Отримуємо базову інформацію
+        title = track.get("title", "Без назви")
+        model_name = track.get("model_name", "")
+        image_url = track.get("image_url") or track.get("source_image_url", "")
+        
+        # Завантажуємо тільки фото, оскільки аудіо ще не доступне
+        photo_file_path = ""
+        task_id = task_record.task_id if task_record else None
+        
+        if image_url:
+            photo_file_path = download_file(image_url, "ai/photo", task_id or track_id)
+        
+        try:
+            # Створюємо попередній запис пісні з доступними даними
+            song = Song.objects.create(
+                user=task_record.user if task_record else None,
+                task_id=task_id,
+                audio_id=track_id,  # Важливо: тут зберігаємо ID з колбеку
+                model_name=model_name,
+                title=title,
+                audio_file="",  # Аудіо буде додане пізніше
+                photo_file=photo_file_path,
+                example=task_record.example if task_record else "",
+                is_public=False
+            )
+            
+            # Додаємо стилі, якщо є
+            tags = track.get("tags", "")
+            if tags:
+                style_names = [s.strip() for s in tags.split(",") if s.strip()]
+                for style_name in style_names:
+                    style_obj, created = MusicStyle.objects.get_or_create(name=style_name)
+                    song.styles.add(style_obj)
+            
+            logger.info(f"Створено попередній запис пісні ID: {song.id}, Audio ID: {track_id}")
+            
+            songs_list.append({
+                "id": song.id,
+                "audio_id": track_id,
+                "title": title,
+                "model_name": model_name
+            })
+            
+        except Exception as e:
+            logger.exception(f"Помилка при створенні попереднього запису пісні: {e}")
+    
+    # В наступних колбеках можна буде оновити ці записи
+    if songs_list:
+        if task_record:
+            task_record.result["songs"] = songs_list
+            task_record.save()
+    
+    return Response({"success": True, "message": "Текст згенеровано", "songs": songs_list}, status=status.HTTP_200_OK)
 
 def process_audio_first_callback(callback_data, task_record):
     """Обробляє колбек типу "first" для генерації аудіо."""
@@ -723,7 +807,7 @@ def process_audio_complete_callback(callback_data, task_record):
     # Оновлюємо запис завдання
     update_task_status(task_record, "completed", {"songs": songs_list})
     
-    return Response({"success": True, "songs": songs_list}, status=status.HTTP_200_OK)
+    return Response({ "success": True, "songs": songs_list }, status=status.HTTP_200_OK)
 
 def process_unknown_callback(callback_data, task_record):
     """Обробляє невідомий тип колбеку."""

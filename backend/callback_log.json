@@ -384,3 +384,117 @@
     },
     "msg": "All generated successfully."
 }
+{
+    "code": 200,
+    "data": {
+        "callbackType": "text",
+        "data": [
+            {
+                "audio_url": "",
+                "createTime": 1741944070271,
+                "id": "ed2faf04-4944-4236-81c9-49de3376451c",
+                "image_url": "https://apiboxfiles.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_image_url": "https://cdn2.suno.ai/image_ed2faf04-4944-4236-81c9-49de3376451c.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=ed2faf04-4944-4236-81c9-49de3376451c",
+                "stream_audio_url": "https://mfile.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj",
+                "tags": "Classical",
+                "title": "Peaceful Piano Meditation"
+            },
+            {
+                "audio_url": "",
+                "createTime": 1741944070271,
+                "id": "8098328a-e598-4f74-9824-ebdad70496ac",
+                "image_url": "https://apiboxfiles.erweima.ai/ODA5ODMyOGEtZTU5OC00Zjc0LTk4MjQtZWJkYWQ3MDQ5NmFj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_image_url": "https://cdn2.suno.ai/image_8098328a-e598-4f74-9824-ebdad70496ac.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=8098328a-e598-4f74-9824-ebdad70496ac",
+                "stream_audio_url": "https://mfile.erweima.ai/ODA5ODMyOGEtZTU5OC00Zjc0LTk4MjQtZWJkYWQ3MDQ5NmFj",
+                "tags": "Classical",
+                "title": "Peaceful Piano Meditation"
+            }
+        ],
+        "task_id": "e9ab2a8134364141b3de43f62f7cde47"
+    },
+    "msg": "Text generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "first",
+        "data": [
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj.mp3",
+                "createTime": 1741944070271,
+                "duration": 240.0,
+                "id": "ed2faf04-4944-4236-81c9-49de3376451c",
+                "image_url": "https://apiboxfiles.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_audio_url": "https://cdn1.suno.ai/ed2faf04-4944-4236-81c9-49de3376451c.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_ed2faf04-4944-4236-81c9-49de3376451c.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=ed2faf04-4944-4236-81c9-49de3376451c",
+                "stream_audio_url": "https://mfile.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj",
+                "tags": "Classical",
+                "title": "Peaceful Piano Meditation"
+            },
+            {
+                "audio_url": "",
+                "createTime": 1741944070271,
+                "id": "8098328a-e598-4f74-9824-ebdad70496ac",
+                "image_url": "https://apiboxfiles.erweima.ai/ODA5ODMyOGEtZTU5OC00Zjc0LTk4MjQtZWJkYWQ3MDQ5NmFj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_image_url": "https://cdn2.suno.ai/image_8098328a-e598-4f74-9824-ebdad70496ac.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=8098328a-e598-4f74-9824-ebdad70496ac",
+                "stream_audio_url": "https://mfile.erweima.ai/ODA5ODMyOGEtZTU5OC00Zjc0LTk4MjQtZWJkYWQ3MDQ5NmFj",
+                "tags": "Classical",
+                "title": "Peaceful Piano Meditation"
+            }
+        ],
+        "task_id": "e9ab2a8134364141b3de43f62f7cde47"
+    },
+    "msg": "First audio generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "complete",
+        "data": [
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj.mp3",
+                "createTime": 1741944648202,
+                "duration": 240.0,
+                "id": "ed2faf04-4944-4236-81c9-49de3376451c",
+                "image_url": "https://apiboxfiles.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_audio_url": "https://cdn1.suno.ai/ed2faf04-4944-4236-81c9-49de3376451c.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_ed2faf04-4944-4236-81c9-49de3376451c.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/ed2faf04-4944-4236-81c9-49de3376451c.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/ZWQyZmFmMDQtNDk0NC00MjM2LTgxYzktNDlkZTMzNzY0NTFj",
+                "tags": "Classical",
+                "title": "Peaceful Piano Meditation"
+            },
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/ODA5ODMyOGEtZTU5OC00Zjc0LTk4MjQtZWJkYWQ3MDQ5NmFj.mp3",
+                "createTime": 1741944648202,
+                "duration": 240.0,
+                "id": "8098328a-e598-4f74-9824-ebdad70496ac",
+                "image_url": "https://apiboxfiles.erweima.ai/ODA5ODMyOGEtZTU5OC00Zjc0LTk4MjQtZWJkYWQ3MDQ5NmFj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_audio_url": "https://cdn1.suno.ai/8098328a-e598-4f74-9824-ebdad70496ac.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_8098328a-e598-4f74-9824-ebdad70496ac.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/8098328a-e598-4f74-9824-ebdad70496ac.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/ODA5ODMyOGEtZTU5OC00Zjc0LTk4MjQtZWJkYWQ3MDQ5NmFj",
+                "tags": "Classical",
+                "title": "Peaceful Piano Meditation"
+            }
+        ],
+        "task_id": "e9ab2a8134364141b3de43f62f7cde47"
+    },
+    "msg": "All generated successfully."
+}

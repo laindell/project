@@ -27,7 +27,9 @@ DEBUG = True   # це не торогати (в режимі розробки) �
 
 APPEND_SLASH = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['a9b0-194-44-198-30.ngrok-free.app',
+        
+                 ]
 
 
 
