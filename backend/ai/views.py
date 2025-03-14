@@ -346,6 +346,9 @@ def generate_wav(request):
         payload = request.data
         example = payload.get("example", "")
         
+        # Логуємо вхідні дані для дебагу
+        logger.info(f"Вхідні дані WAV: {payload}")
+        
         # Перевіряємо, щоб був вказаний хоча б один з обов'язкових ідентифікаторів
         if not payload.get("taskId") and not payload.get("audioId"):
             return Response(
@@ -368,33 +371,130 @@ def generate_wav(request):
         logger.info(f"Створено завдання генерації WAV: {task_record.id}")
         
         # Виконуємо запит до Suno API
-        resp = requests.post(f"{SUNO_BASE_URL}/api/v1/wav/generate", json=payload, headers=HEADERS)
-        response_data = resp.json()
+        try:
+            resp = requests.post(f"{SUNO_BASE_URL}/api/v1/wav/generate", json=payload, headers=HEADERS)
+            logger.info(f"Відповідь від API: статус {resp.status_code}")
+            
+            # Логуємо тіло відповіді для дебагу
+            try:
+                logger.info(f"Тіло відповіді: {resp.text[:500]}")  # Перші 500 символів для безпеки
+            except Exception as e:
+                logger.warning(f"Не вдалося логувати тіло відповіді: {e}")
+                
+        except requests.RequestException as e:
+            logger.error(f"Помилка запиту до API: {e}")
+            task_record.status = "failed"
+            task_record.result = {"error": f"Помилка запиту до API: {str(e)}"}
+            task_record.save()
+            return Response(
+                {"error": f"Помилка запиту до API: {str(e)}"}, 
+                status=status.HTTP_502_BAD_GATEWAY
+            )
         
-        # Перевіряємо успішність запиту
-        if resp.status_code == 200:
-            task_id = response_data.get("data", {}).get("taskId")
+        # Перевіряємо статус відповіді
+        if resp.status_code != 200:
+            task_record.status = "failed"
+            task_record.result = {"error": f"API повернуло помилку: {resp.status_code}"}
+            task_record.save()
+            return Response(
+                {"error": f"API повернуло помилку: {resp.status_code}"}, 
+                status=resp.status_code
+            )
+            
+        # Парсимо відповідь
+        try:
+            response_data = resp.json()
+            logger.info(f"Розпарсені дані відповіді: {response_data}")
+        except ValueError as e:
+            logger.error(f"Не вдалося розпарсити JSON: {e}")
+            task_record.status = "failed"
+            task_record.result = {"error": f"Не вдалося розпарсити відповідь API: {str(e)}"}
+            task_record.save()
+            return Response(
+                {"error": f"Не вдалося розпарсити відповідь API: {str(e)}"}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+        # Перевіряємо структуру відповіді - захищаємо від None
+        if not response_data:
+            # Якщо відповідь порожня, використовуємо task_id з запиту
+            logger.warning("API повернуло порожню відповідь, використовуємо task_id з запиту")
+            task_id = payload.get("taskId")
+            
+            if not task_id:
+                # Якщо немає task_id у запиті, генеруємо свій для відстеження
+                task_id = f"wav_{uuid.uuid4().hex}"
+                logger.warning(f"Створено тимчасовий task_id: {task_id}")
+            
+            task_record.task_id = task_id
+            task_record.save()
+            
+            return Response({
+                "success": True,
+                "message": "Завдання відправлено, очікуємо колбек",
+                "taskId": task_id,
+                "status": "pending"
+            }, status=status.HTTP_200_OK)
+        
+        # Перевіряємо наявність поля data
+        data = response_data.get("data")
+        if not data:
+            logger.warning("Відсутнє поле 'data' у відповіді")
+            
+            # Перевіряємо інші можливі місця для task_id
+            task_id = response_data.get("taskId")
+            
+            if not task_id:
+                # Якщо немає task_id у відповіді, використовуємо з запиту або генеруємо свій
+                task_id = payload.get("taskId")
+                
+                if not task_id:
+                    task_id = f"wav_{uuid.uuid4().hex}"
+                    logger.warning(f"Створено тимчасовий task_id: {task_id}")
+            
+            task_record.task_id = task_id
+            task_record.status = "pending"
+            task_record.result = response_data
+            task_record.save()
+            
+            return Response({
+                "success": True,
+                "message": "Завдання відправлено з нестандартною відповіддю",
+                "taskId": task_id,
+                "status": "pending"
+            }, status=status.HTTP_200_OK)
+        
+        # Якщо data є словником, пробуємо отримати task_id
+        if isinstance(data, dict):
+            task_id = data.get("taskId")
             if task_id:
                 task_record.task_id = task_id
                 task_record.save()
                 logger.info(f"Завдання {task_record.id} успішно відправлено, отримано task_id: {task_id}")
                 
-                # Повертаємо успішну відповідь з task_id
                 return Response({
                     "success": True,
                     "message": "Завдання виконано успішно",
                     "taskId": task_id,
                     "status": "pending"
                 }, status=status.HTTP_200_OK)
-        else:
-            # Якщо запит не успішний, оновлюємо статус завдання
-            task_record.status = "failed"
-            task_record.result = {"error": response_data.get("msg", "Невідома помилка")}
-            task_record.save()
-            logger.error(f"Помилка при створенні завдання {task_record.id}: {response_data}")
         
-        return Response(response_data, status=resp.status_code)
+        # Якщо це масив, або немає task_id, обробляємо нестандартний випадок
+        logger.warning(f"Нестандартна структура відповіді: {type(data)}")
         
+        # Використовуємо task_id з запиту або ID завдання в базі
+        task_id = payload.get("taskId") or f"wav_task_{task_record.id}"
+        task_record.task_id = task_id
+        task_record.result = response_data
+        task_record.save()
+        
+        return Response({
+            "success": True,
+            "message": "Завдання відправлено з нестандартною відповіддю",
+            "taskId": task_id,
+            "status": "pending"
+        }, status=status.HTTP_200_OK)
+            
     except Exception as e:
         # Логуємо помилку
         logger.exception(f"Помилка при створенні завдання генерації WAV: {e}")
@@ -547,17 +647,56 @@ def process_lyrics_callback(callback_data, task_record):
 
 def process_wav_callback(callback_data, task_record):
     """Обробляє колбек для генерації WAV файлу."""
-    audio_wav_url = callback_data.get("audio_wav_url")
-    task_id = task_record.task_id if task_record else callback_data.get("task_id")
+    logger.info(f"Обробка колбеку для генерації WAV файлу. Дані: {callback_data}")
     
-    logger.info(f"Обробка колбеку для генерації WAV файлу. URL: {audio_wav_url}")
+    # Валідація вхідних даних
+    if not callback_data:
+        logger.error("Отримано порожні дані колбеку для WAV")
+        return Response(
+            {"error": "Отримано порожні дані колбеку"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Перевірка наявності audio_wav_url з безпечним доступом через get
+    audio_wav_url = callback_data.get("audio_wav_url", "")
+    if not audio_wav_url:
+        logger.warning("Відсутній URL WAV-файлу в колбеку")
+    
+    task_id = None
+    # Пробуємо отримати task_id з різних джерел
+    if task_record:
+        task_id = task_record.task_id
+    elif "task_id" in callback_data:
+        task_id = callback_data.get("task_id")
+    elif "taskId" in callback_data:
+        task_id = callback_data.get("taskId")
+    
+    if not task_id:
+        logger.error("Неможливо визначити task_id для WAV колбеку")
+        return Response(
+            {"error": "Неможливо визначити task_id"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    logger.info(f"Обробка колбеку для генерації WAV файлу. URL: {audio_wav_url}, Task ID: {task_id}")
     
     # Завантажуємо WAV файл, якщо є URL
-    wav_file_path = download_file(audio_wav_url, "ai/wav", task_id) if audio_wav_url else ""
+    wav_file_path = ""
+    if audio_wav_url:
+        wav_file_path = download_file(audio_wav_url, "ai/wav", task_id)
     
-    update_task_status(task_record, "completed", {"audio_wav_file": wav_file_path})
+    # Оновлюємо статус завдання
+    if task_record:
+        update_task_status(task_record, "completed", {
+            "audio_wav_file": wav_file_path,
+            "original_callback_data": callback_data
+        })
     
-    return Response({"success": True, "wav_file": wav_file_path}, status=status.HTTP_200_OK)
+    return Response({
+        "success": True, 
+        "wav_file": wav_file_path,
+        "task_id": task_id
+    }, status=status.HTTP_200_OK)
 
 def process_audio_text_callback(callback_data, task_record):
     """Обробляє колбек типу "text" для генерації аудіо."""
