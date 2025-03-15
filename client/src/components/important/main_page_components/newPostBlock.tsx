@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { useError } from '@/context/ErrorContext';
 import MicroPost from '@/components/MicroPost';
 import fetchClient from '@/other/fetchClient';
+import Image from 'next/image';
 
 interface CompInterface {
   userData: UserData | null;
@@ -131,10 +132,12 @@ const NewPostBlock = ({
       style={{ boxShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
     >
       <div className='mb-4 flex items-center'>
-        <img
+        <Image
           className='h-12 w-12 rounded-[14px] border-[1px] border-[#2d2d2d]'
           src={userData ? userData.photo : 'Завантаження...'}
           alt='User'
+          width={50}
+          height={50}
         />
         <div className='ml-2 mt-1 flex-1'>
           <textarea

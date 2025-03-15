@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
         pathname: '/media/**', // Вказує дозволені шляхи
       },
     ],
+    domains: [process.env.NEXT_PUBLIC_API_URL?.split("https://")[1] || "localhost"]
   },
 };
 

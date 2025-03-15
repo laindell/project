@@ -63,7 +63,10 @@ const Auth: React.FC = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/users/register/`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Ngrok-Skip-Browser-Warning': "true"
+          },
           body: JSON.stringify({
             email,
             password,

@@ -55,9 +55,10 @@ export default function NotificationsPage() {
 
   const setupWebSocket = async () => {
     // Формуємо WebSocket URL на основі протоколу поточної сторінки
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const token = await refreshAccessToken();
-    const wsUrl = `${protocol}://localhost:8000/ws/notifications/?token=${token}`;
+    const abobaUrl = `${process.env.NEXT_PUBLIC_API_URL}`;
+    const sigmaUrl = `${abobaUrl.replace(/^http/, 'ws').replace(/^https/, 'wss')}`;
+    const wsUrl = `${sigmaUrl}/ws/notifications/?token=${token}`;
 
     const socket = new WebSocket(wsUrl);
 

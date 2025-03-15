@@ -25,7 +25,6 @@ type ResponseData = {
 // Тип для об'єкта аудіо
 type SongData = {
   audio_id: string;
-
   id: string;
   task_id: string;
   title: string;
@@ -514,10 +513,10 @@ const SunoAIPage = () => {
                     {/* Список пісень (відображається при потребі) */}
                     {showSongsList && (
                       <SongsList
-                        songs={songs}
-                        onSelect={(song) => handleSelectSong(song as unknown as SongData)}
-                        onClose={() => setShowSongsList(false)}
-                      />
+                      songs={songs}
+                      onSelect={(song) => handleSelectSong(song as unknown as SongData)}
+                      onClose={() => setShowSongsList(false)}
+                    />
                     
                     )}
                     

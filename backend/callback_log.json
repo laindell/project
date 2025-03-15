@@ -498,3 +498,141 @@
     },
     "msg": "All generated successfully."
 }
+{
+    "code": 200,
+    "data": {
+        "callbackType": "text",
+        "data": [
+            {
+                "audio_url": "",
+                "createTime": 1741968598512,
+                "id": "ef325b94-befa-4068-b713-ab4d27054827",
+                "image_url": "https://apiboxfiles.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_image_url": "https://cdn2.suno.ai/image_ef325b94-befa-4068-b713-ab4d27054827.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=ef325b94-befa-4068-b713-ab4d27054827",
+                "stream_audio_url": "https://mfile.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3",
+                "tags": "Classical",
+                "title": "Чекіст"
+            },
+            {
+                "audio_url": "",
+                "createTime": 1741968598512,
+                "id": "03b0a79d-990a-4497-bc54-8912b7b6bf8c",
+                "image_url": "https://apiboxfiles.erweima.ai/MDNiMGE3OWQtOTkwYS00NDk3LWJjNTQtODkxMmI3YjZiZjhj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_image_url": "https://cdn2.suno.ai/image_03b0a79d-990a-4497-bc54-8912b7b6bf8c.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=03b0a79d-990a-4497-bc54-8912b7b6bf8c",
+                "stream_audio_url": "https://mfile.erweima.ai/MDNiMGE3OWQtOTkwYS00NDk3LWJjNTQtODkxMmI3YjZiZjhj",
+                "tags": "Classical",
+                "title": "Чекіст"
+            }
+        ],
+        "task_id": "7be3d984bc5a593afdd7d3f4892c25b5"
+    },
+    "msg": "Text generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "first",
+        "data": [
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3.mp3",
+                "createTime": 1741968598512,
+                "duration": 38.2,
+                "id": "ef325b94-befa-4068-b713-ab4d27054827",
+                "image_url": "https://apiboxfiles.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_audio_url": "https://cdn1.suno.ai/ef325b94-befa-4068-b713-ab4d27054827.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_ef325b94-befa-4068-b713-ab4d27054827.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=ef325b94-befa-4068-b713-ab4d27054827",
+                "stream_audio_url": "https://mfile.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3",
+                "tags": "Classical",
+                "title": "Чекіст"
+            },
+            {
+                "audio_url": "",
+                "createTime": 1741968598512,
+                "id": "03b0a79d-990a-4497-bc54-8912b7b6bf8c",
+                "image_url": "https://apiboxfiles.erweima.ai/MDNiMGE3OWQtOTkwYS00NDk3LWJjNTQtODkxMmI3YjZiZjhj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_image_url": "https://cdn2.suno.ai/image_03b0a79d-990a-4497-bc54-8912b7b6bf8c.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=03b0a79d-990a-4497-bc54-8912b7b6bf8c",
+                "stream_audio_url": "https://mfile.erweima.ai/MDNiMGE3OWQtOTkwYS00NDk3LWJjNTQtODkxMmI3YjZiZjhj",
+                "tags": "Classical",
+                "title": "Чекіст"
+            }
+        ],
+        "task_id": "7be3d984bc5a593afdd7d3f4892c25b5"
+    },
+    "msg": "First audio generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "complete",
+        "data": [
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3.mp3",
+                "createTime": 1741968697104,
+                "duration": 38.2,
+                "id": "ef325b94-befa-4068-b713-ab4d27054827",
+                "image_url": "https://apiboxfiles.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_audio_url": "https://cdn1.suno.ai/ef325b94-befa-4068-b713-ab4d27054827.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_ef325b94-befa-4068-b713-ab4d27054827.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/ef325b94-befa-4068-b713-ab4d27054827.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/ZWYzMjViOTQtYmVmYS00MDY4LWI3MTMtYWI0ZDI3MDU0ODI3",
+                "tags": "Classical",
+                "title": "Чекіст"
+            },
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/MDNiMGE3OWQtOTkwYS00NDk3LWJjNTQtODkxMmI3YjZiZjhj.mp3",
+                "createTime": 1741968697104,
+                "duration": 138.92,
+                "id": "03b0a79d-990a-4497-bc54-8912b7b6bf8c",
+                "image_url": "https://apiboxfiles.erweima.ai/MDNiMGE3OWQtOTkwYS00NDk3LWJjNTQtODkxMmI3YjZiZjhj.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "",
+                "source_audio_url": "https://cdn1.suno.ai/03b0a79d-990a-4497-bc54-8912b7b6bf8c.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_03b0a79d-990a-4497-bc54-8912b7b6bf8c.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/03b0a79d-990a-4497-bc54-8912b7b6bf8c.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/MDNiMGE3OWQtOTkwYS00NDk3LWJjNTQtODkxMmI3YjZiZjhj",
+                "tags": "Classical",
+                "title": "Чекіст"
+            }
+        ],
+        "task_id": "7be3d984bc5a593afdd7d3f4892c25b5"
+    },
+    "msg": "All generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "audio_wav_url": "https://tempfile.aiquickdraw.com/s/f67d6d33bd4041f7b44304b3a510826b.wav",
+        "task_id": "3eb5bc991f25c5dec79255ff1d58ab49"
+    },
+    "msg": "All generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "audio_wav_url": "https://tempfile.aiquickdraw.com/s/360077ec5f5f47c5bafc515c8b70ba8f.wav",
+        "task_id": "9187d7fa3efc86174a3e3855fa138eb0"
+    },
+    "msg": "All generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "audio_wav_url": "https://tempfile.aiquickdraw.com/s/91e514d019e2429896a07d787dcbfbd8.wav",
+        "task_id": "0dab9eca1ce0b65ab94324449c590110"
+    },
+    "msg": "All generated successfully."
+}

@@ -550,52 +550,75 @@ def process_track(track, task_record, task_id):
     
     logger.info(f"Обробка треку: {title} (ID: {audio_id})")
     
-    # Завантажуємо файли
+    if not audio_id:
+        logger.warning("Пропущено трек без audio_id")
+        return None
+        
+    # Завантажуємо файли тільки якщо вони вказані у респонсі
     audio_file_path = download_file(audio_url, "ai/music", task_id) if audio_url else ""
     photo_file_path = download_file(image_url, "ai/photo", task_id) if image_url else ""
     
-    # Виходимо, якщо файли не завантажені
-    if not (audio_file_path or photo_file_path):
-        return None
-    
     try:
-        # Розділяємо теги на список
-        style_names = [s.strip() for s in tags.split(",") if s.strip()]
+        # Спочатку перевіряємо, чи існує пісня з таким audio_id
+        existing_song = Song.objects.filter(audio_id=audio_id).first()
         
-        # Створюємо запис Song
-        song = Song.objects.create(
-            user=task_record.user if task_record else None,
-            task_id=task_id,
-            audio_id=audio_id,  
-            model_name=model_name,
-            title=title,
-            audio_file=audio_file_path,
-            photo_file=photo_file_path,
-            example=task_record.example if task_record else "",
-            is_public=False  # За замовчуванням не публічна
-        )
-        
-        # Додаємо стилі до пісні
-        for style_name in style_names:
-            style_obj, created = MusicStyle.objects.get_or_create(name=style_name)
-            song.styles.add(style_obj)
-        
-        logger.info(f"Створено запис пісні ID: {song.id}, Audio ID: {audio_id}")
-        
-        # повертаємо дані пісні
+        if existing_song:
+            # Якщо пісня існує, оновлюємо її поля
+            logger.info(f"Знайдено існуючу пісню ID: {existing_song.id}, Audio ID: {audio_id}. Оновлюємо...")
+            
+            # Оновлюємо аудіо і фото, якщо вони є
+            if audio_file_path:
+                existing_song.audio_file = audio_file_path
+            if photo_file_path:
+                existing_song.photo_file = photo_file_path
+                
+            # Оновлюємо інші поля, тільки якщо вони мають значення
+            if title:
+                existing_song.title = title
+            if model_name:
+                existing_song.model_name = model_name
+                
+            existing_song.save()
+            song = existing_song
+            
+        else:
+            # Розділяємо теги на список
+            style_names = [s.strip() for s in tags.split(",") if s.strip()]
+            
+            # Створюємо новий запис Song, якщо пісня не існує
+            song = Song.objects.create(
+                user=task_record.user if task_record else None,
+                task_id=task_id,
+                audio_id=audio_id,  
+                model_name=model_name,
+                title=title,
+                audio_file=audio_file_path,
+                photo_file=photo_file_path,
+                example=task_record.example if task_record else "",
+                is_public=False  # За замовчуванням не публічна
+            )
+            
+            # Додаємо стилі до пісні
+            for style_name in style_names:
+                style_obj, created = MusicStyle.objects.get_or_create(name=style_name)
+                song.styles.add(style_obj)
+            
+            logger.info(f"Створено новий запис пісні ID: {song.id}, Audio ID: {audio_id}")
+            
+        # Повертаємо дані пісні
         return {
             "id": song.id,
             "audio_id": audio_id,
-            "audio_file": audio_file_path,
-            "photo_file": photo_file_path,
+            "audio_file": song.audio_file,  # Використовуємо поле з БД, воно може бути оновлене
+            "photo_file": song.photo_file,  # Використовуємо поле з БД, воно може бути оновлене
             "title": title,
             "model_name": model_name,
-            "tags": style_names,
+            "tags": [s.strip() for s in tags.split(",") if s.strip()],
             "prompt": prompt,
             "duration": duration
         }
     except Exception as e:
-        logger.exception(f"Помилка при створенні запису пісні: {e}")
+        logger.exception(f"Помилка при створенні/оновленні запису пісні: {e}")
     
     return None
 # обробники колбеків для різних типів
@@ -746,18 +769,40 @@ def process_audio_text_callback(callback_data, task_record):
             photo_file_path = download_file(image_url, "ai/photo", task_id or track_id)
         
         try:
-            # Створюємо попередній запис пісні з доступними даними
-            song = Song.objects.create(
-                user=task_record.user if task_record else None,
-                task_id=task_id,
-                audio_id=track_id,  # Важливо: тут зберігаємо ID з колбеку
-                model_name=model_name,
-                title=title,
-                audio_file="",  # Аудіо буде додане пізніше
-                photo_file=photo_file_path,
-                example=task_record.example if task_record else "",
-                is_public=False
-            )
+            # Перевіряємо, чи існує вже пісня з таким audio_id
+            existing_song = Song.objects.filter(audio_id=track_id).first()
+            
+            if existing_song:
+                # Якщо пісня існує, оновлюємо її поля
+                logger.info(f"Знайдено існуючу пісню ID: {existing_song.id}, Audio ID: {track_id}. Оновлюємо...")
+                
+                if photo_file_path:
+                    existing_song.photo_file = photo_file_path
+                    
+                # Оновлюємо інші поля, тільки якщо вони мають значення
+                if title:
+                    existing_song.title = title
+                if model_name:
+                    existing_song.model_name = model_name
+                    
+                existing_song.save()
+                song = existing_song
+                
+            else:
+                # Створюємо попередній запис пісні з доступними даними
+                song = Song.objects.create(
+                    user=task_record.user if task_record else None,
+                    task_id=task_id,
+                    audio_id=track_id,  # Важливо: тут зберігаємо ID з колбеку
+                    model_name=model_name,
+                    title=title,
+                    audio_file="",  # Аудіо буде додане пізніше
+                    photo_file=photo_file_path,
+                    example=task_record.example if task_record else "",
+                    is_public=False
+                )
+                
+                logger.info(f"Створено попередній запис пісні ID: {song.id}, Audio ID: {track_id}")
             
             # Додаємо стилі, якщо є
             tags = track.get("tags", "")
@@ -767,8 +812,6 @@ def process_audio_text_callback(callback_data, task_record):
                     style_obj, created = MusicStyle.objects.get_or_create(name=style_name)
                     song.styles.add(style_obj)
             
-            logger.info(f"Створено попередній запис пісні ID: {song.id}, Audio ID: {track_id}")
-            
             songs_list.append({
                 "id": song.id,
                 "audio_id": track_id,
@@ -777,7 +820,7 @@ def process_audio_text_callback(callback_data, task_record):
             })
             
         except Exception as e:
-            logger.exception(f"Помилка при створенні попереднього запису пісні: {e}")
+            logger.exception(f"Помилка при створенні/оновленні попереднього запису пісні: {e}")
     
     # В наступних колбеках можна буде оновити ці записи
     if songs_list:
@@ -1159,7 +1202,7 @@ def get_wav_record(request):
                 {"error": "Завдання не знайдено"}, 
                 status=status.HTTP_404_NOT_FOUND
             )
-            
+
     except Exception as e:
         logger.exception(f"Помилка при отриманні інформації про завдання WAV: {e}")
         return Response(

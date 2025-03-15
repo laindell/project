@@ -35,6 +35,7 @@ const fetchClient = async (url: string, options?: RequestInit) => {
   const headers = {
     ...(options && options.headers && options.headers),
     ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+    ...({ "Ngrok-Skip-Browser-Warning": true })
   };
 
   let response = await fetch(`${url}`, { ...options, headers });
