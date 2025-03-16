@@ -32,3 +32,32 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+
+
+/* Стиль для блокування прокрутки при відкритому модальному вікні */
+.modal-open {
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Стиль для перевизначення z-index для портальних модальних вікон */
+body > .photo-modal-portal {
+  z-index: 9999;
+  position: relative;
+}
+
+/* Стилі для анімації переходів між зображеннями */
+.photo-modal-image-enter {
+  opacity: 0;
+}
+.photo-modal-image-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.photo-modal-image-exit {
+  opacity: 1;
+}
+.photo-modal-image-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

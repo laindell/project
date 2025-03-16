@@ -1,22 +1,9 @@
 'use client';
 
-import {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  FormEvent,
-  ChangeEvent,
-} from 'react';
+import {useEffect, useState, useRef, useCallback, FormEvent, ChangeEvent,} from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Users,
-  Send,
-  Trash2,
-  Image as ImageIcon,
-  UserPlus,
-} from 'lucide-react';
+import { Users, Send, Trash2, Image as ImageIcon, UserPlus,} from 'lucide-react';
 import { useError } from '@/context/ErrorContext';
 import fetchClient from '@/other/fetchClient';
 import Image from 'next/image';

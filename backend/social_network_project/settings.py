@@ -28,7 +28,7 @@ DEBUG = True   # це не торогати (в режимі розробки) �
 APPEND_SLASH = False
 
 ALLOWED_HOSTS = [
-    '9beb-188-163-113-175.ngrok-free.app',
+    'c260-188-163-113-175.ngrok-free.app',
     '127.0.0.1:8000',
     'localhost:8000'
 ]

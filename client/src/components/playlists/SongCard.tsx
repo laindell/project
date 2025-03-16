@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Play, Pause, Download } from 'lucide-react';
+import { Eye, EyeOff, Play, Pause, Download, ListPlus } from 'lucide-react';
 import Image from 'next/image';
+import { PlayerContext } from '@/components/surrounding/player';
 
 interface Song {
   id: string;
@@ -18,8 +19,6 @@ interface Song {
 interface SongCardProps {
   song: Song;
   isUserSong: boolean;
-  isPlaying: boolean;
-  onTogglePlay: () => void;
   onToggleVisibility?: () => void;
   onDownloadWav?: () => void;
 }
@@ -27,12 +26,15 @@ interface SongCardProps {
 const SongCard: React.FC<SongCardProps> = ({
   song,
   isUserSong,
-  isPlaying,
-  onTogglePlay,
   onToggleVisibility,
   onDownloadWav,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const playerContext = useContext(PlayerContext);
+  
+  // Check if this song is currently playing
+  const isPlaying = playerContext.isPlaying && 
+                   playerContext.currentSong?.id === song.id;
   
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -42,6 +44,32 @@ const SongCard: React.FC<SongCardProps> = ({
       month: 'short',
       day: 'numeric',
     }).format(date);
+  };
+  
+  // Play the song using the global player
+  const handlePlayClick = () => {
+    const songMetadata = {
+      id: song.id,
+      title: song.title,
+      artist: song.model_name,
+      audio_file: song.audio_file,
+      photo_file: song.photo_file
+    };
+    
+    playerContext.playSong(songMetadata);
+  };
+  
+  // Add the song to the queue
+  const handleAddToQueue = () => {
+    const songMetadata = {
+      id: song.id,
+      title: song.title,
+      artist: song.model_name,
+      audio_file: song.audio_file,
+      photo_file: song.photo_file
+    };
+    
+    playerContext.addToQueue(songMetadata);
   };
 
   return (
@@ -77,7 +105,7 @@ const SongCard: React.FC<SongCardProps> = ({
           className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40"
           initial={{ opacity: 0 }}
           animate={{ opacity: isHovered || isPlaying ? 1 : 0 }}
-          onClick={onTogglePlay}
+          onClick={handlePlayClick}
         >
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#6374B6] text-white shadow-lg">
             {isPlaying ? (
@@ -117,6 +145,16 @@ const SongCard: React.FC<SongCardProps> = ({
               )}
             </motion.button>
           )}
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-1 rounded-lg bg-[#3C4B84] px-3 py-1 text-sm text-white transition-colors hover:bg-[#6374B6]"
+            onClick={handleAddToQueue}
+          >
+            <ListPlus className="h-4 w-4" />
+            <span>У чергу</span>
+          </motion.button>
 
           {isUserSong && onDownloadWav && (
             <motion.button

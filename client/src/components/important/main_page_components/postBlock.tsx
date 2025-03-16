@@ -6,6 +6,7 @@ import MiniPlayer from '@/components/MiniPlayer';
 import { useError } from '@/context/ErrorContext';
 import MicroPost from '@/components/MicroPost';
 import VideoEmbed from '@/components/VideoEmbed';
+import PhotoModal from '@/components/PhotoModal';
 import fetchClient from '@/other/fetchClient';
 import Image from 'next/image';
 
@@ -22,9 +23,13 @@ export const PostBlock = ({
   const [post, setPost] = useState<Post>(getPost);
   const [repostedPost, setRepostedPost] = useState<Post | null>(null);
   const [commentList, setCommentList] = useState([]);
-  const [showFullContent, setShowFullContent] = useState<boolean>(false); // New state for toggling full content
+  const [showFullContent, setShowFullContent] = useState<boolean>(false);
   const { showError } = useError();
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
+  
+  // Photo modal state
+  const [photoModalOpen, setPhotoModalOpen] = useState<boolean>(false);
+  const [photoModalIndex, setPhotoModalIndex] = useState<number>(0);
 
   // Truncate long content to a specific length (e.g., 200 characters)
   const truncateContent = (text: string, maxLength: number = 200) => {
@@ -36,6 +41,12 @@ export const PostBlock = ({
   const truncateHashtag = (hashtag: string, maxLength: number = 20) => {
     if (hashtag.length <= maxLength) return hashtag;
     return hashtag.substring(0, maxLength) + '...';
+  };
+  
+  // Handle image click to open the photo modal
+  const handleImageClick = (index: number) => {
+    setPhotoModalIndex(index);
+    setPhotoModalOpen(true);
   };
 
   useEffect(() => {
@@ -248,39 +259,40 @@ export const PostBlock = ({
           )}
         </p>
         <div className='mb-4 flex flex-col items-start justify-start'>
-          {/* Блок фотографій */}
-          <div className='flex'>
-            {post.images.length > 0 && (
-              <Image
-                className='m-3 min-h-[200px] min-w-[200px] rounded shadow-[0_3px_5px_2px_#101010] duration-300 hover:shadow-[0_1px_5px_2px_#000000]'
-                src={post.images[0].image}
-                width={50}
-                height={50}
-                alt='хуй'
-              />
-            )}
-
-            {post.images.length > 1 && (
-              <div className='flex flex-wrap justify-center'>
-                {post.images.slice(1).map((element, key) => (
-                  <Image
-                    key={key}
-                    className='m-1 max-h-[200px] max-w-[200px] rounded shadow-[0_3px_5px_2px_#101010] duration-300 hover:shadow-[0_1px_5px_2px_#000000]'
+          {/* Photos gallery */}
+          {post.images.length > 0 && (
+            <div className='flex flex-wrap justify-center'>
+              {post.images.map((element, key) => (
+                <div
+                  key={key}
+                  className='m-1 min-h-[200px] min-w-[200px] cursor-pointer rounded transition-all duration-300 flex justify-center items-center'
+                  onClick={() => handleImageClick(key)}
+                >
+                  <img
                     src={element.image}
-                    width={50}
-                    height={50}
-                    alt='хуй'
+                    alt='Post image'
+                    className='transition-all duration-300 hover:scale-105 max-h-[200px] max-w-[200px] shadow-[0_3px_5px_2px_#101010] hover:shadow-[0_1px_5px_2px_#000000]'
                   />
-                ))}
-              </div>
-            )}
-          </div>
-          {/* Блок аудіо */}
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {/* Photo Modal */}
+          <PhotoModal
+            images={post.images}
+            initialIndex={photoModalIndex}
+            isOpen={photoModalOpen}
+            onClose={() => setPhotoModalOpen(false)}
+          />
+          
+          {/* Audio block */}
           {post.audios.length > 0 &&
             post.audios.map((element, key) => (
               <MiniPlayer key={key} audioSrc={element.audio} />
             ))}
-          {/* Блок відео */}
+            
+          {/* Video block */}
           {post.videos.length > 0 &&
             post.videos.map((element, key) => (
               <div
@@ -292,6 +304,8 @@ export const PostBlock = ({
                 </video>
               </div>
             ))}
+            
+          {/* Hashtags block */}
           {post.hashtag_objects.length > 0 ? (
             <div className='flex flex-wrap'>
               {post.hashtag_objects.map((element, key) => (
@@ -310,9 +324,11 @@ export const PostBlock = ({
             <></>
           )}
         </div>
-        {/* Блок репосту */}
+        
+        {/* Repost block */}
         {repostedPost && <MicroPost post={repostedPost} />}
-        {/* Блок з кнопками */}
+        
+        {/* Action buttons */}
         <div className='mt-4 flex items-center space-x-4'>
           <motion.div
             whileHover={{ scale: 1.1 }}
