@@ -7,6 +7,7 @@ import { useError } from '@/context/ErrorContext';
 import MicroPost from '@/components/MicroPost';
 import VideoEmbed from '@/components/VideoEmbed';
 import fetchClient from '@/other/fetchClient';
+import Image from 'next/image';
 
 export const PostBlock = ({
   getPost,
@@ -195,10 +196,12 @@ export const PostBlock = ({
       >
         <div className='flex items-center justify-between'>
           <div className='flex'>
-            <img
+            <Image
               className='h-10 w-10 rounded-[14px] border-[1px] border-[#2d2d2d]'
               src={post.author?.photo}
               alt='User'
+              width={50}
+              height={50}
             />
             <div className='ml-3'>
               <p className='cursor-pointer text-sm font-medium text-white hover:underline'>
@@ -248,19 +251,25 @@ export const PostBlock = ({
           {/* Блок фотографій */}
           <div className='flex'>
             {post.images.length > 0 && (
-              <img
+              <Image
                 className='m-3 min-h-[200px] min-w-[200px] rounded shadow-[0_3px_5px_2px_#101010] duration-300 hover:shadow-[0_1px_5px_2px_#000000]'
                 src={post.images[0].image}
+                width={50}
+                height={50}
+                alt='хуй'
               />
             )}
 
             {post.images.length > 1 && (
               <div className='flex flex-wrap justify-center'>
                 {post.images.slice(1).map((element, key) => (
-                  <img
+                  <Image
                     key={key}
                     className='m-1 max-h-[200px] max-w-[200px] rounded shadow-[0_3px_5px_2px_#101010] duration-300 hover:shadow-[0_1px_5px_2px_#000000]'
                     src={element.image}
+                    width={50}
+                    height={50}
+                    alt='хуй'
                   />
                 ))}
               </div>

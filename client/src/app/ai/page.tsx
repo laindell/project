@@ -20,6 +20,13 @@ type ResponseData = {
   message?: string;
   taskId?: string;
   status?: string;
+  wav_file?: string; // Add this field to store the WAV file path
+  task?: {
+    status: string;
+    result?: {
+      audio_wav_file?: string; // Add this field to handle WAV file from task result
+    };
+  };
 };
 
 // Тип для об'єкта аудіо
@@ -126,6 +133,27 @@ const SunoAIPage = () => {
       console.error('Помилка отримання даних:', error);
       return null;
     }
+  };
+
+  const downloadWavFile = (filePath: string) => {
+    if (!filePath) {
+      showError('Шлях до WAV файлу не знайдено', 'error');
+      return;
+    }
+    
+    // Construct the full URL to the WAV file
+    // Assuming the filePath is relative to the media root on the server
+    const fileUrl = `${process.env.NEXT_PUBLIC_API_URL}/media/${filePath}`;
+    
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = `downloaded_audio_${Date.now()}.wav`; // Generate a unique filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showError('Файл завантажується...', 'success');
   };
 
   // Функція для отримання пісень користувача
@@ -996,6 +1024,19 @@ const SunoAIPage = () => {
                                 Перевірити статус
                               </button>
                             )}
+                            
+                            {(response?.wav_file || (response?.task?.result?.audio_wav_file)) ? (
+                              <button
+                                type='button'
+                                onClick={() => {
+                                  const filePath = response?.wav_file || response?.task?.result?.audio_wav_file;
+                                  if (filePath) downloadWavFile(filePath);
+                                }}
+                                className='ml-4 rounded-lg bg-green-600 px-6 py-3 text-white transition-all hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2'
+                              >
+                                Завантажити WAV
+                              </button>
+                            ) : null}
                           </div>
                         </form>
 

@@ -636,3 +636,133 @@
     },
     "msg": "All generated successfully."
 }
+{
+    "code": 200,
+    "data": {
+        "audio_wav_url": "https://tempfile.aiquickdraw.com/s/5a22e45da0ca4d29b4fcf3ef4e676448.wav",
+        "task_id": "46d8f0343755ba1060cd5ba3c581f5c3"
+    },
+    "msg": "All generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "audio_wav_url": "https://tempfile.aiquickdraw.com/s/c051a281ac5a4263be0891a1ef71b526.wav",
+        "task_id": "8040d00c15bce2b6df31fcd0d3ccd931"
+    },
+    "msg": "All generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "text",
+        "data": [
+            {
+                "audio_url": "",
+                "createTime": 1742065299191,
+                "id": "289c546f-f7d7-4ec7-ad49-1bbcee0a9739",
+                "image_url": "https://apiboxfiles.erweima.ai/Mjg5YzU0NmYtZjdkNy00ZWM3LWFkNDktMWJiY2VlMGE5NzM5.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "DIin_Don",
+                "source_image_url": "https://cdn2.suno.ai/image_289c546f-f7d7-4ec7-ad49-1bbcee0a9739.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=289c546f-f7d7-4ec7-ad49-1bbcee0a9739",
+                "stream_audio_url": "https://mfile.erweima.ai/Mjg5YzU0NmYtZjdkNy00ZWM3LWFkNDktMWJiY2VlMGE5NzM5",
+                "tags": "rock",
+                "title": "DIin_Don"
+            },
+            {
+                "audio_url": "",
+                "createTime": 1742065299191,
+                "id": "d10ac50b-697f-4c46-b636-f94c43502149",
+                "image_url": "https://apiboxfiles.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "DIin_Don",
+                "source_image_url": "https://cdn2.suno.ai/image_d10ac50b-697f-4c46-b636-f94c43502149.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=d10ac50b-697f-4c46-b636-f94c43502149",
+                "stream_audio_url": "https://mfile.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5",
+                "tags": "rock",
+                "title": "DIin_Don"
+            }
+        ],
+        "task_id": "853b555e72e9ab0107bbdeac295a1b51"
+    },
+    "msg": "Text generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "first",
+        "data": [
+            {
+                "audio_url": "",
+                "createTime": 1742065299191,
+                "id": "289c546f-f7d7-4ec7-ad49-1bbcee0a9739",
+                "image_url": "https://apiboxfiles.erweima.ai/Mjg5YzU0NmYtZjdkNy00ZWM3LWFkNDktMWJiY2VlMGE5NzM5.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "DIin_Don",
+                "source_image_url": "https://cdn2.suno.ai/image_289c546f-f7d7-4ec7-ad49-1bbcee0a9739.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=289c546f-f7d7-4ec7-ad49-1bbcee0a9739",
+                "stream_audio_url": "https://mfile.erweima.ai/Mjg5YzU0NmYtZjdkNy00ZWM3LWFkNDktMWJiY2VlMGE5NzM5",
+                "tags": "rock",
+                "title": "DIin_Don"
+            },
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5.mp3",
+                "createTime": 1742065299191,
+                "duration": 28.24,
+                "id": "d10ac50b-697f-4c46-b636-f94c43502149",
+                "image_url": "https://apiboxfiles.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "DIin_Don",
+                "source_audio_url": "https://cdn1.suno.ai/d10ac50b-697f-4c46-b636-f94c43502149.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_d10ac50b-697f-4c46-b636-f94c43502149.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=d10ac50b-697f-4c46-b636-f94c43502149",
+                "stream_audio_url": "https://mfile.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5",
+                "tags": "rock",
+                "title": "DIin_Don"
+            }
+        ],
+        "task_id": "853b555e72e9ab0107bbdeac295a1b51"
+    },
+    "msg": "First audio generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "complete",
+        "data": [
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/Mjg5YzU0NmYtZjdkNy00ZWM3LWFkNDktMWJiY2VlMGE5NzM5.mp3",
+                "createTime": 1742065382266,
+                "duration": 128.76,
+                "id": "289c546f-f7d7-4ec7-ad49-1bbcee0a9739",
+                "image_url": "https://apiboxfiles.erweima.ai/Mjg5YzU0NmYtZjdkNy00ZWM3LWFkNDktMWJiY2VlMGE5NzM5.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "DIin_Don",
+                "source_audio_url": "https://cdn1.suno.ai/289c546f-f7d7-4ec7-ad49-1bbcee0a9739.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_289c546f-f7d7-4ec7-ad49-1bbcee0a9739.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/289c546f-f7d7-4ec7-ad49-1bbcee0a9739.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/Mjg5YzU0NmYtZjdkNy00ZWM3LWFkNDktMWJiY2VlMGE5NzM5",
+                "tags": "rock",
+                "title": "DIin_Don"
+            },
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5.mp3",
+                "createTime": 1742065382266,
+                "duration": 28.24,
+                "id": "d10ac50b-697f-4c46-b636-f94c43502149",
+                "image_url": "https://apiboxfiles.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "DIin_Don",
+                "source_audio_url": "https://cdn1.suno.ai/d10ac50b-697f-4c46-b636-f94c43502149.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_d10ac50b-697f-4c46-b636-f94c43502149.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/d10ac50b-697f-4c46-b636-f94c43502149.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/ZDEwYWM1MGItNjk3Zi00YzQ2LWI2MzYtZjk0YzQzNTAyMTQ5",
+                "tags": "rock",
+                "title": "DIin_Don"
+            }
+        ],
+        "task_id": "853b555e72e9ab0107bbdeac295a1b51"
+    },
+    "msg": "All generated successfully."
+}

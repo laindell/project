@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'localhost',
+        hostname: '9beb-188-163-113-175.ngrok-free.app',
         port: '8000', // Вказуйте порт, з якого завантажуються зображення
         pathname: '/media/**', // Вказує дозволені шляхи
       },
