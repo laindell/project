@@ -766,3 +766,117 @@
     },
     "msg": "All generated successfully."
 }
+{
+    "code": 200,
+    "data": {
+        "callbackType": "text",
+        "data": [
+            {
+                "audio_url": "",
+                "createTime": 1742231334842,
+                "id": "4d1d4fcd-45e0-4764-bd28-012b760e996d",
+                "image_url": "https://apiboxfiles.erweima.ai/NGQxZDRmY2QtNDVlMC00NzY0LWJkMjgtMDEyYjc2MGU5OTZk.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "pop",
+                "source_image_url": "https://cdn2.suno.ai/image_4d1d4fcd-45e0-4764-bd28-012b760e996d.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=4d1d4fcd-45e0-4764-bd28-012b760e996d",
+                "stream_audio_url": "https://mfile.erweima.ai/NGQxZDRmY2QtNDVlMC00NzY0LWJkMjgtMDEyYjc2MGU5OTZk",
+                "tags": "rock",
+                "title": "musik"
+            },
+            {
+                "audio_url": "",
+                "createTime": 1742231334842,
+                "id": "a4e12773-3d2e-4ebb-aff0-6c42be82437a",
+                "image_url": "https://apiboxfiles.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "pop",
+                "source_image_url": "https://cdn2.suno.ai/image_a4e12773-3d2e-4ebb-aff0-6c42be82437a.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=a4e12773-3d2e-4ebb-aff0-6c42be82437a",
+                "stream_audio_url": "https://mfile.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh",
+                "tags": "rock",
+                "title": "musik"
+            }
+        ],
+        "task_id": "8271d041cb5c9b87ba7ab1a45e0f97f9"
+    },
+    "msg": "Text generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "first",
+        "data": [
+            {
+                "audio_url": "",
+                "createTime": 1742231334842,
+                "id": "4d1d4fcd-45e0-4764-bd28-012b760e996d",
+                "image_url": "https://apiboxfiles.erweima.ai/NGQxZDRmY2QtNDVlMC00NzY0LWJkMjgtMDEyYjc2MGU5OTZk.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "pop",
+                "source_image_url": "https://cdn2.suno.ai/image_4d1d4fcd-45e0-4764-bd28-012b760e996d.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=4d1d4fcd-45e0-4764-bd28-012b760e996d",
+                "stream_audio_url": "https://mfile.erweima.ai/NGQxZDRmY2QtNDVlMC00NzY0LWJkMjgtMDEyYjc2MGU5OTZk",
+                "tags": "rock",
+                "title": "musik"
+            },
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh.mp3",
+                "createTime": 1742231334842,
+                "duration": 184.24,
+                "id": "a4e12773-3d2e-4ebb-aff0-6c42be82437a",
+                "image_url": "https://apiboxfiles.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "pop",
+                "source_audio_url": "https://cdn1.suno.ai/a4e12773-3d2e-4ebb-aff0-6c42be82437a.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_a4e12773-3d2e-4ebb-aff0-6c42be82437a.jpeg",
+                "source_stream_audio_url": "https://audiopipe.suno.ai/?item_id=a4e12773-3d2e-4ebb-aff0-6c42be82437a",
+                "stream_audio_url": "https://mfile.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh",
+                "tags": "rock",
+                "title": "musik"
+            }
+        ],
+        "task_id": "8271d041cb5c9b87ba7ab1a45e0f97f9"
+    },
+    "msg": "First audio generated successfully."
+}
+{
+    "code": 200,
+    "data": {
+        "callbackType": "complete",
+        "data": [
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/NGQxZDRmY2QtNDVlMC00NzY0LWJkMjgtMDEyYjc2MGU5OTZk.mp3",
+                "createTime": 1742231480388,
+                "duration": 212.8,
+                "id": "4d1d4fcd-45e0-4764-bd28-012b760e996d",
+                "image_url": "https://apiboxfiles.erweima.ai/NGQxZDRmY2QtNDVlMC00NzY0LWJkMjgtMDEyYjc2MGU5OTZk.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "pop",
+                "source_audio_url": "https://cdn1.suno.ai/4d1d4fcd-45e0-4764-bd28-012b760e996d.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_4d1d4fcd-45e0-4764-bd28-012b760e996d.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/4d1d4fcd-45e0-4764-bd28-012b760e996d.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/NGQxZDRmY2QtNDVlMC00NzY0LWJkMjgtMDEyYjc2MGU5OTZk",
+                "tags": "rock",
+                "title": "musik"
+            },
+            {
+                "audio_url": "https://apiboxfiles.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh.mp3",
+                "createTime": 1742231480388,
+                "duration": 184.24,
+                "id": "a4e12773-3d2e-4ebb-aff0-6c42be82437a",
+                "image_url": "https://apiboxfiles.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh.jpeg",
+                "model_name": "chirp-v3-5",
+                "prompt": "pop",
+                "source_audio_url": "https://cdn1.suno.ai/a4e12773-3d2e-4ebb-aff0-6c42be82437a.mp3",
+                "source_image_url": "https://cdn2.suno.ai/image_a4e12773-3d2e-4ebb-aff0-6c42be82437a.jpeg",
+                "source_stream_audio_url": "https://cdn1.suno.ai/a4e12773-3d2e-4ebb-aff0-6c42be82437a.mp3",
+                "stream_audio_url": "https://mfile.erweima.ai/YTRlMTI3NzMtM2QyZS00ZWJiLWFmZjAtNmM0MmJlODI0Mzdh",
+                "tags": "rock",
+                "title": "musik"
+            }
+        ],
+        "task_id": "8271d041cb5c9b87ba7ab1a45e0f97f9"
+    },
+    "msg": "All generated successfully."
+}

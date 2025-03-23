@@ -73,6 +73,7 @@ const Auth: React.FC = () => {
             password2,
             display_name: displayName,
           }),
+          mode: 'cors'  
         },
       );
 

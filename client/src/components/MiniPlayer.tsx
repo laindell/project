@@ -13,10 +13,9 @@ import {
 
 interface AudioPlayerProps {
   audioSrc: string;
-  key?: number;
 }
 
-const MiniPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, key }) => {
+const MiniPlayer: React.FC<AudioPlayerProps> = ({ audioSrc }) => {
   // State for player functionality
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
@@ -208,7 +207,6 @@ const MiniPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, key }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      key={key}
     >
       {/* File name and info */}
       <div className="flex items-center mb-2">
